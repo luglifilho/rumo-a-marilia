@@ -2,7 +2,7 @@
 (function () {
   "use strict";
 
-  const TARGET = new Date(2026, 11, 23, 8, 0, 0); // 23/12/2026 08h00 (hora local)
+  const TARGET = new Date(2026, 11, 28, 8, 0, 0); // 28/12/2026 08h00 (hora local)
   const $ = (id) => document.getElementById(id);
   const pad = (n) => String(n).padStart(2, "0");
 
@@ -81,6 +81,7 @@
   /* ---------- abertura ---------- */
   const intro = $("intro");
   const home = $("home");
+  const gate = $("start-gate");
 
   function endIntro() {
     if (window.IntroAnim) IntroAnim.stop();
@@ -93,8 +94,14 @@
   function startIntro() {
     intro.classList.remove("hidden", "fading");
     home.classList.add("hidden");
-    IntroAnim.play(endIntro);
+    gate.classList.remove("fading");
+    IntroAnim.build(); // o mapa já fica pronto atrás da tela do acelerador
   }
+
+  $("pedal").addEventListener("click", () => {
+    gate.classList.add("fading");
+    IntroAnim.play(endIntro);
+  });
 
   $("skip").addEventListener("click", endIntro);
   $("replay").addEventListener("click", () => {

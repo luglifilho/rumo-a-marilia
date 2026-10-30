@@ -86,27 +86,27 @@
         <g id="smoke"></g>
         <!-- bagageiro: bustos primeiro, malas na frente -->
         <g id="roof">
-          ${bust("v-homem2", -34, -56, 92)}
-          ${bust("v-mulher2", 38, -56, 94)}
-          ${bust("v-menina", 112, -56, 76)}
-          <rect x="-86" y="-62" width="252" height="8" rx="4" fill="#6b4a2f"/>
-          <g transform="rotate(-3 -40 -78)"><rect x="-82" y="-96" width="76" height="36" rx="6" fill="#e2a23c" stroke="#9c6d22" stroke-width="3"/><rect x="-52" y="-96" width="8" height="36" fill="#9c6d22" opacity=".55"/></g>
-          <g transform="rotate(2 40 -76)"><rect x="2" y="-90" width="70" height="30" rx="6" fill="#7fb6a4" stroke="#4e8070" stroke-width="3"/><rect x="30" y="-90" width="8" height="30" fill="#4e8070" opacity=".55"/></g>
-          <g transform="rotate(-2 110 -72)"><rect x="82" y="-84" width="54" height="24" rx="5" fill="#a8744f" stroke="#6b4a2f" stroke-width="3"/></g>
+          ${bust("v-homem2", -34, -94, 72)}
+          ${bust("v-homem1", 38, -94, 72)}
+          ${bust("v-menina", 112, -94, 72)}
+          <rect x="-86" y="-100" width="252" height="8" rx="4" fill="#6b4a2f"/>
+          <g transform="rotate(-3 -40 -116)"><rect x="-82" y="-134" width="76" height="36" rx="6" fill="#e2a23c" stroke="#9c6d22" stroke-width="3"/><rect x="-52" y="-134" width="8" height="36" fill="#9c6d22" opacity=".55"/></g>
+          <g transform="rotate(2 40 -114)"><rect x="2" y="-128" width="70" height="30" rx="6" fill="#7fb6a4" stroke="#4e8070" stroke-width="3"/><rect x="30" y="-128" width="8" height="30" fill="#4e8070" opacity=".55"/></g>
+          <g transform="rotate(-2 110 -110)"><rect x="82" y="-122" width="54" height="24" rx="5" fill="#a8744f" stroke="#6b4a2f" stroke-width="3"/></g>
         </g>
-        <!-- carroceria -->
-        <path d="M -175 40 L -175 -6 Q -174 -20 -158 -23 L -116 -27 Q -98 -56 -74 -58 L 148 -58 Q 170 -56 170 -34 L 170 40 Q 170 52 156 52 L -160 52 Q -175 52 -175 40 Z"
+        <!-- carroceria (cabine alta: janelões) -->
+        <path d="M -175 40 L -175 -10 Q -174 -24 -158 -27 L -120 -31 Q -104 -90 -78 -92 L 148 -92 Q 170 -90 170 -64 L 170 40 Q 170 52 156 52 L -160 52 Q -175 52 -175 40 Z"
           fill="#f5e2b8" stroke="#7c4a33" stroke-width="4"/>
         <path d="M -175 10 L 170 10 L 170 40 Q 170 52 156 52 L -160 52 Q -175 52 -175 40 Z" fill="#c84a3c"/>
         <path d="M -175 10 L 170 10 L 170 17 L -175 17 Z" fill="#fffdf6" opacity=".85"/>
         <!-- janelas -->
-        <path d="M -112 -22 L -72 -50 L -58 -50 L -58 -8 L -108 -8 Q -116 -8 -112 -22 Z" fill="#bfe0ee" stroke="#7c4a33" stroke-width="3.5"/>
-        <clipPath id="cpw0"><path d="M -112 -22 L -72 -50 L -58 -50 L -58 -8 L -108 -8 Q -116 -8 -112 -22 Z"/></clipPath>
-        <g clip-path="url(#cpw0)">${bust("v-vovo", -82, -9, 40)}</g>
-        ${[["cpw1", -16, "v-vo"], ["cpw2", 56, "v-mulher1"], ["cpw3", 128, "v-homem1"]].map(([id, cx, who]) => `
-          <rect x="${cx - 31}" y="-52" width="62" height="47" rx="8" fill="#bfe0ee" stroke="#7c4a33" stroke-width="3.5"/>
-          <clipPath id="${id}"><rect x="${cx - 31}" y="-52" width="62" height="47" rx="8"/></clipPath>
-          <g clip-path="url(#${id})">${bust(who, cx, -7, 42)}</g>`).join("")}
+        <path d="M -116 -26 L -82 -84 L -64 -84 L -64 -10 L -110 -10 Q -120 -10 -116 -26 Z" fill="#bfe0ee" stroke="#7c4a33" stroke-width="3.5"/>
+        <clipPath id="cpw0"><path d="M -116 -26 L -82 -84 L -64 -84 L -64 -10 L -110 -10 Q -120 -10 -116 -26 Z"/></clipPath>
+        <g clip-path="url(#cpw0)">${bust("v-vovo", -84, -11, 72)}</g>
+        ${[["cpw1", -18, "v-vo"], ["cpw2", 54, "v-mulher1"], ["cpw3", 126, "v-mulher2"]].map(([id, cx, who]) => `
+          <rect x="${cx - 31}" y="-84" width="62" height="72" rx="9" fill="#bfe0ee" stroke="#7c4a33" stroke-width="3.5"/>
+          <clipPath id="${id}"><rect x="${cx - 31}" y="-84" width="62" height="72" rx="9"/></clipPath>
+          <g clip-path="url(#${id})">${bust(who, cx, -11, 70)}</g>`).join("")}
         <!-- detalhes -->
         <circle cx="-158" cy="2" r="11" fill="#ffd97a" stroke="#7c4a33" stroke-width="3.5"/>
         <rect x="-181" y="28" width="26" height="12" rx="5" fill="#cfc5ad" stroke="#7c4a33" stroke-width="3"/>
@@ -200,8 +200,22 @@
       <path d="${ROAD}" fill="none" stroke="#b9f7ae" stroke-width="8" stroke-linecap="round"/>
     </g>
 
+    <!-- rodoviária de Marília, o "chapéu" símbolo da cidade -->
+    <g id="rodoviaria" transform="translate(592 318)">
+      <ellipse cx="-4" cy="46" rx="118" ry="10" fill="#6b655a" opacity=".2"/>
+      <path d="M -62 42 L -56 -2 M -22 44 L -20 -6 M 22 44 L 20 -6 M 60 42 L 54 -2" stroke="#3a3f45" stroke-width="7" stroke-linecap="round"/>
+      <rect x="-36" y="6" width="72" height="34" rx="5" fill="#b8d4e3" stroke="#5b86a0" stroke-width="2.5"/>
+      <path d="M -36 20 H 36 M -24 6 V 40 M 0 6 V 40 M 24 6 V 40" stroke="#5b86a0" stroke-width="2" opacity=".7"/>
+      <rect x="-84" y="20" width="36" height="22" rx="4" fill="#6f9fd8" stroke="#33567d" stroke-width="2.5"/>
+      <rect x="-80" y="24" width="10" height="8" rx="2" fill="#d6e9f2"/>
+      <rect x="-66" y="24" width="10" height="8" rx="2" fill="#d6e9f2"/>
+      <ellipse cx="0" cy="-4" rx="112" ry="20" fill="#30353b"/>
+      <ellipse cx="0" cy="-12" rx="116" ry="20" fill="#f4f2ec" stroke="#8d867a" stroke-width="3"/>
+      <path d="M -15 -28 C -6 -62 -2 -84 1 -90 C 4 -72 10 -46 17 -28 Q 1 -34 -15 -28 Z" fill="#f4f2ec" stroke="#8d867a" stroke-width="3" stroke-linejoin="round"/>
+      <path d="M -17 -27 Q 1 -35 19 -27" fill="none" stroke="#8d867a" stroke-width="2.5"/>
+    </g>
     ${reception()}
-    ${label(MARILIA.x, MARILIA.y, "MARÍLIA", true, 10, -160)}
+    ${label(MARILIA.x, MARILIA.y, "MARÍLIA", true, 10, -240)}
     ${label(SANTOS.x, SANTOS.y, "SANTOS", true, -295, 6)}
 
     <g id="confetti"></g>
@@ -361,5 +375,5 @@
     setCaption(null);
   }
 
-  window.IntroAnim = { play, stop };
+  window.IntroAnim = { play, stop, build: buildScene };
 })();

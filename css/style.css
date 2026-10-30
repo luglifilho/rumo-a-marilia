@@ -50,6 +50,88 @@ body {
   box-shadow: inset 0 0 18vmax rgba(46, 32, 12, .42);
 }
 
+/* ======== tela do acelerador ======== */
+#start-gate {
+  position: absolute;
+  inset: 0;
+  z-index: 58;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(110% 90% at 50% 20%, rgba(253, 250, 241, .96) 0%, rgba(246, 241, 228, .97) 60%, rgba(236, 228, 207, .98) 100%);
+  transition: opacity .5s ease;
+}
+#start-gate.fading { opacity: 0; pointer-events: none; }
+
+.gate-card { text-align: center; padding: 24px; }
+
+.gate-kicker {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .3em;
+  color: var(--gold);
+  border: 1px solid var(--gold-soft);
+  border-radius: 999px;
+  padding: 8px 16px 7px;
+  background: var(--cream-2);
+}
+
+.gate-card h2 {
+  font-family: "Cormorant Garamond", serif;
+  font-weight: 500;
+  font-size: clamp(34px, 8vw, 46px);
+  color: #3e3426;
+  margin: 16px 0 4px;
+}
+
+.gate-card p {
+  font-size: 14.5px;
+  color: var(--ink-soft);
+  margin-bottom: 26px;
+}
+
+#pedal {
+  position: relative;
+  background: var(--card);
+  border: 2px solid var(--gold-soft);
+  border-radius: 26px;
+  padding: 20px 34px 14px;
+  cursor: pointer;
+  box-shadow: 0 10px 26px rgba(74, 63, 46, .18);
+  transition: transform .12s ease, box-shadow .12s ease;
+  animation: pedalpulse 1.6s ease-in-out infinite;
+}
+#pedal:hover { transform: translateY(-3px); }
+#pedal:active { transform: translateY(2px) scale(.97); box-shadow: 0 4px 12px rgba(74, 63, 46, .2); }
+#pedal:active #pedal-plate { transform: rotate(-2deg); transform-origin: 65px 150px; }
+#pedal-plate { transition: transform .1s ease; }
+
+@keyframes pedalpulse {
+  0%, 100% { box-shadow: 0 10px 26px rgba(74, 63, 46, .18); }
+  50% { box-shadow: 0 10px 34px rgba(176, 141, 63, .4); }
+}
+
+.vrum {
+  position: absolute;
+  right: -6px;
+  bottom: 14px;
+  font-size: 22px;
+  opacity: 0;
+  transition: opacity .2s;
+}
+#pedal:active .vrum { opacity: 1; }
+
+.gate-card small {
+  display: block;
+  margin-top: 18px;
+  font-size: 12px;
+  letter-spacing: .14em;
+  color: var(--ink-soft);
+  text-transform: uppercase;
+}
+
 #cap {
   position: absolute;
   left: 50%;
