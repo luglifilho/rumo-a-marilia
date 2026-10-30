@@ -102,11 +102,11 @@
         <!-- janelas -->
         <path d="M -112 -22 L -72 -50 L -58 -50 L -58 -8 L -108 -8 Q -116 -8 -112 -22 Z" fill="#bfe0ee" stroke="#7c4a33" stroke-width="3.5"/>
         <clipPath id="cpw0"><path d="M -112 -22 L -72 -50 L -58 -50 L -58 -8 L -108 -8 Q -116 -8 -112 -22 Z"/></clipPath>
-        <g clip-path="url(#cpw0)">${bust("v-vovo", -80, -4, 62)}</g>
+        <g clip-path="url(#cpw0)">${bust("v-vovo", -82, -9, 40)}</g>
         ${[["cpw1", -16, "v-vo"], ["cpw2", 56, "v-mulher1"], ["cpw3", 128, "v-homem1"]].map(([id, cx, who]) => `
-          <rect x="${cx - 31}" y="-50" width="62" height="44" rx="8" fill="#bfe0ee" stroke="#7c4a33" stroke-width="3.5"/>
-          <clipPath id="${id}"><rect x="${cx - 31}" y="-50" width="62" height="44" rx="8"/></clipPath>
-          <g clip-path="url(#${id})">${bust(who, cx, -2, 58)}</g>`).join("")}
+          <rect x="${cx - 31}" y="-52" width="62" height="47" rx="8" fill="#bfe0ee" stroke="#7c4a33" stroke-width="3.5"/>
+          <clipPath id="${id}"><rect x="${cx - 31}" y="-52" width="62" height="47" rx="8"/></clipPath>
+          <g clip-path="url(#${id})">${bust(who, cx, -7, 42)}</g>`).join("")}
         <!-- detalhes -->
         <circle cx="-158" cy="2" r="11" fill="#ffd97a" stroke="#7c4a33" stroke-width="3.5"/>
         <rect x="-181" y="28" width="26" height="12" rx="5" fill="#cfc5ad" stroke="#7c4a33" stroke-width="3"/>
@@ -145,7 +145,7 @@
         ${bust("m-pai", 204, 420, 105)}
         ${bust("m-mae", 274, 422, 98)}
         ${bust("m-menino", 334, 420, 80)}
-        ${bust("m-bebe", 160, 418, 52)}
+        ${bust("m-bebe", 146, 416, 52)}
       </g>
       <rect x="154" y="404" width="262" height="28" rx="14" fill="#7fa06b"/>
       <rect x="144" y="412" width="282" height="26" rx="13" fill="#90b17a"/>
