@@ -84,6 +84,7 @@
   const gate = $("start-gate");
 
   function endIntro() {
+    if (typeof engine !== "undefined") engine.kill();
     if (window.IntroAnim) IntroAnim.stop();
     intro.classList.add("fading");
     home.classList.remove("hidden");
@@ -124,52 +125,70 @@
     }
   })();
 
-  /* ronco do motor (Web Audio, sem arquivo) */
+  /* ronco de motor de carro VELHO (Web Audio, sem arquivo) */
   const engine = (() => {
-    let ctx, osc1, osc2, gain, filt, noise, noiseGain, started = false;
+    let ctx, osc1, osc2, gain, filt, noise, noiseGain, lfo, started = false;
     function ensure() {
       if (started) return;
       ctx = new (window.AudioContext || window.webkitAudioContext)();
       gain = ctx.createGain(); gain.gain.value = 0;
-      filt = ctx.createBiquadFilter(); filt.type = "lowpass"; filt.frequency.value = 400; filt.Q.value = 2;
-      osc1 = ctx.createOscillator(); osc1.type = "sawtooth"; osc1.frequency.value = 50;
-      osc2 = ctx.createOscillator(); osc2.type = "square"; osc2.frequency.value = 25;
-      const o2g = ctx.createGain(); o2g.gain.value = 0.5;
-      // chiado de partida
+      // bem abafado, como escapamento furado
+      filt = ctx.createBiquadFilter(); filt.type = "lowpass"; filt.frequency.value = 260; filt.Q.value = 1.4;
+      osc1 = ctx.createOscillator(); osc1.type = "sawtooth"; osc1.frequency.value = 38;
+      osc2 = ctx.createOscillator(); osc2.type = "square"; osc2.frequency.value = 19;
+      const o2g = ctx.createGain(); o2g.gain.value = 0.7;
+      // chocalho/partida
       const buf = ctx.createBuffer(1, ctx.sampleRate, ctx.sampleRate);
       const d = buf.getChannelData(0);
       for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
       noise = ctx.createBufferSource(); noise.buffer = buf; noise.loop = true;
       noiseGain = ctx.createGain(); noiseGain.gain.value = 0;
+      // "putt-putt": tremolo na cadência das explosões
+      const trem = ctx.createGain(); trem.gain.value = 0.72;
+      lfo = ctx.createOscillator(); lfo.type = "square"; lfo.frequency.value = 9;
+      const lfoDepth = ctx.createGain(); lfoDepth.gain.value = 0.28;
+      lfo.connect(lfoDepth); lfoDepth.connect(trem.gain);
       osc1.connect(filt); osc2.connect(o2g); o2g.connect(filt);
       noise.connect(noiseGain); noiseGain.connect(filt);
-      filt.connect(gain); gain.connect(ctx.destination);
-      osc1.start(); osc2.start(); noise.start();
+      filt.connect(trem); trem.connect(gain); gain.connect(ctx.destination);
+      osc1.start(); osc2.start(); noise.start(); lfo.start();
       started = true;
     }
     return {
-      rev(p, t) { // p: 0..1, t: segundos (pro tremor de partida)
+      rev(p, t) { // p: 0..1, t: segundos segurando
         ensure();
         if (ctx.state === "suspended") ctx.resume();
-        const sputter = Math.sin(t * 34) * (1 - p) * 9;   // motor "pegando"
-        const f = 46 + p * 190 + sputter;
-        osc1.frequency.setTargetAtTime(f, ctx.currentTime, 0.03);
-        osc2.frequency.setTargetAtTime(f / 2, ctx.currentTime, 0.03);
-        filt.frequency.setTargetAtTime(320 + p * 2400, ctx.currentTime, 0.05);
-        gain.gain.setTargetAtTime(0.06 + p * 0.2, ctx.currentTime, 0.05);
-        noiseGain.gain.setTargetAtTime(0.12 * (1 - p), ctx.currentTime, 0.05);
+        // engasgos fortes na partida, leves depois (motor velho nunca fica redondo)
+        const sputter = Math.sin(t * 27) * 8 * (1 - p * 0.55) + Math.sin(t * 6.7) * 3;
+        const f = 34 + p * 110 + sputter;
+        osc1.frequency.setTargetAtTime(f, ctx.currentTime, 0.035);
+        osc2.frequency.setTargetAtTime(f / 2, ctx.currentTime, 0.035);
+        filt.frequency.setTargetAtTime(230 + p * 780, ctx.currentTime, 0.06);
+        lfo.frequency.setTargetAtTime(8 + p * 24, ctx.currentTime, 0.05);
+        gain.gain.setTargetAtTime(0.09 + p * 0.2, ctx.currentTime, 0.05);
+        noiseGain.gain.setTargetAtTime(0.05 + 0.1 * (1 - p), ctx.currentTime, 0.05);
       },
       idleOff() {
         if (!started) return;
         gain.gain.setTargetAtTime(0, ctx.currentTime, 0.18);
         noiseGain.gain.setTargetAtTime(0, ctx.currentTime, 0.1);
       },
-      launch() { // reváda final e fade
+      launch() { // revada curta e silêncio ainda na tela de abertura
         if (!started) return;
-        osc1.frequency.setTargetAtTime(290, ctx.currentTime, 0.1);
-        filt.frequency.setTargetAtTime(3200, ctx.currentTime, 0.1);
-        gain.gain.setTargetAtTime(0.3, ctx.currentTime, 0.08);
-        gain.gain.setTargetAtTime(0, ctx.currentTime + 1.4, 0.8);
+        const now = ctx.currentTime;
+        osc1.frequency.setTargetAtTime(165, now, 0.08);
+        filt.frequency.setTargetAtTime(1100, now, 0.08);
+        gain.gain.cancelScheduledValues(now);
+        gain.gain.setTargetAtTime(0.3, now, 0.06);
+        gain.gain.setTargetAtTime(0, now + 0.3, 0.12); // mudo em ~0,8s
+        noiseGain.gain.setTargetAtTime(0, now + 0.2, 0.08);
+      },
+      kill() { // corte imediato (pular / fim da abertura)
+        if (!started) return;
+        const now = ctx.currentTime;
+        gain.gain.cancelScheduledValues(now);
+        gain.gain.setTargetAtTime(0, now, 0.05);
+        noiseGain.gain.setTargetAtTime(0, now, 0.05);
       },
     };
   })();

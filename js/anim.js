@@ -325,8 +325,8 @@
       .call(() => setCaption("Dezembro de 2026 · uma viagem em família"))
       .to(q("#route-hint"), { opacity: 0.5, duration: 0.8 }, "<")
       .to(qa(".city-label")[1], { opacity: 1, duration: 0.5 }, 0.7)
-      // 2) zoom em Santos + embarque
-      .to(cam, { x: SANTOS.x - 40, y: SANTOS.y - 60, w: 860, duration: 1.6, ease: "power2.inOut", onUpdate: applyCam }, 0.9)
+      // 2) close na van, bem no centro da tela, para o embarque
+      .to(cam, { x: SANTOS.x, y: SANTOS.y - 80, w: 440, duration: 1.6, ease: "power2.inOut", onUpdate: applyCam }, 0.9)
       .call(() => setCaption("todo mundo a bordo! 🧳"))
       .to(qa("#van .bust"), {
         scale: 1, duration: 0.5, ease: "back.out(2.4)", stagger: 0.14,
@@ -352,13 +352,13 @@
           cam.x = pos.x; cam.y = pos.y; applyCam();
         },
       }, "trip")
-      .to(cam, { w: 980, duration: 1.4, ease: "power1.inOut", onUpdate: applyCam }, "trip")
+      .to(cam, { w: 980, duration: 1.8, ease: "power1.inOut", onUpdate: applyCam }, "trip")
       .to(qa("#van .wheel"), { rotation: -1440, transformOrigin: "center", duration: DRIVE, ease: "power1.inOut" }, "trip")
       .to(q("#van-bob"), { y: -3, duration: 0.2, repeat: Math.floor(DRIVE / 0.2) - 1, yoyo: true, ease: "sine.inOut" }, "trip")
       .call(() => setCaption("mais de 400 km de saudade pela frente…"), null, "trip+=2.8")
       // 4) chegada
       .call(() => { clearInterval(puffTimer); puffTimer = null; setCaption(null); })
-      .to(cam, { x: 330, y: 370, w: 800, duration: 1.1, ease: "power2.inOut", onUpdate: applyCam })
+      .to(cam, { x: 365, y: 350, w: 700, duration: 1.2, ease: "power2.inOut", onUpdate: applyCam })
       .to(qa(".city-label")[0], { opacity: 1, duration: 0.5 }, "<+=0.3")
       .call(() => setCaption("chegamos! 🎉 …quer dizer, falta pouco!"))
       .to(qa("#greeters .bust"), { y: 0, opacity: 1, duration: 0.55, ease: "back.out(2.6)", stagger: 0.13 })
