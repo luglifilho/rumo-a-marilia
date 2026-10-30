@@ -7,9 +7,9 @@
   const AV = (n) => `assets/busts/${n}.png`;
   // proporção largura/altura de cada busto (gerado pelo make_busts.py)
   const AR = {
-    "m-menino": 0.803, "m-pai": 0.692, "m-bebe": 1.195, "m-mae": 0.639,
-    "v-homem1": 0.519, "v-mulher1": 0.59, "v-homem2": 0.604,
-    "v-mulher2": 0.726, "v-vovo": 0.670, "v-vo": 0.602, "v-menina": 0.761,
+    "m-menino": 0.677, "m-pai": 0.678, "m-bebe": 0.684, "m-mae": 0.659,
+    "v-homem1": 0.709, "v-mulher1": 0.691, "v-homem2": 0.675,
+    "v-mulher2": 0.661, "v-vovo": 0.72, "v-vo": 0.594, "v-menina": 0.673,
   };
   const bust = (n, cx, bottom, h, extra = "") =>
     `<image class="bust b-${n}" href="${AV(n)}" x="${cx - (h * AR[n]) / 2}" y="${bottom - h}" width="${h * AR[n]}" height="${h}" ${extra}/>`;
@@ -126,7 +126,7 @@
   function reception() {
     return `
     <g id="reception">
-      <g class="xtree" transform="translate(95 352) scale(1.15)">
+      <g class="xtree" transform="translate(190 330) scale(1.6)">
         <rect x="-8" y="52" width="16" height="20" rx="3" fill="#8a5a33"/>
         <path d="M0 -58 L34 -6 L14 -6 L42 34 L18 34 L48 70 L-48 70 L-18 34 L-42 34 L-14 -6 L-34 -6 Z" fill="#3d6b45" stroke="#2c5234" stroke-width="3" stroke-linejoin="round"/>
         <circle cx="-16" cy="22" r="5" fill="#c84a3c"/><circle cx="18" cy="48" r="5" fill="#d9a62e"/>
@@ -134,21 +134,21 @@
         <path class="star" d="M0 -78 L5 -65 L19 -65 L8 -56 L12 -43 L0 -51 L-12 -43 L-8 -56 L-19 -65 L-5 -65 Z" fill="#e8b93c" stroke="#c89a25" stroke-width="2"/>
       </g>
       <g id="banner">
-        <line x1="168" y1="238" x2="168" y2="310" stroke="#8a5a33" stroke-width="5"/>
-        <line x1="390" y1="238" x2="390" y2="310" stroke="#8a5a33" stroke-width="5"/>
+        <line x1="66" y1="146" x2="66" y2="218" stroke="#8a5a33" stroke-width="5"/>
+        <line x1="314" y1="146" x2="314" y2="218" stroke="#8a5a33" stroke-width="5"/>
         <g id="banner-cloth">
-          <path d="M 168 240 Q 279 260 390 240 L 390 282 Q 279 302 168 282 Z" fill="#fffdf6" stroke="#c84a3c" stroke-width="3.5"/>
-          <text x="279" y="272" text-anchor="middle" font-size="24" font-weight="700" letter-spacing="2.5" fill="#c84a3c">BEM-VINDOS!</text>
+          <path d="M 66 150 Q 190 170 314 150 L 314 192 Q 190 212 66 192 Z" fill="#fffdf6" stroke="#c84a3c" stroke-width="3.5"/>
+          <text x="190" y="181" text-anchor="middle" font-size="24" font-weight="700" letter-spacing="2.5" fill="#c84a3c">BEM-VINDOS!</text>
         </g>
       </g>
       <g id="greeters">
-        ${bust("m-pai", 204, 420, 105)}
-        ${bust("m-mae", 274, 422, 98)}
-        ${bust("m-menino", 334, 420, 80)}
-        ${bust("m-bebe", 146, 416, 52)}
+        ${bust("m-pai", 150, 452, 118)}
+        ${bust("m-mae", 218, 454, 112)}
+        ${bust("m-menino", 272, 448, 92)}
+        ${bust("m-bebe", 92, 446, 64)}
       </g>
-      <rect x="154" y="404" width="262" height="28" rx="14" fill="#7fa06b"/>
-      <rect x="144" y="412" width="282" height="26" rx="13" fill="#90b17a"/>
+      <rect x="64" y="438" width="262" height="28" rx="14" fill="#7fa06b"/>
+      <rect x="54" y="446" width="282" height="26" rx="13" fill="#90b17a"/>
     </g>`;
   }
 
@@ -269,8 +269,8 @@
       r.setAttribute("fill", colors[i % colors.length]);
       g.appendChild(r);
       gsap.fromTo(r,
-        { x: 320, y: 320, rotation: 0, opacity: 1 },
-        { x: 320 + gsap.utils.random(-300, 300), y: 320 + gsap.utils.random(-60, 310),
+        { x: 260, y: 310, rotation: 0, opacity: 1 },
+        { x: 260 + gsap.utils.random(-300, 300), y: 310 + gsap.utils.random(-60, 310),
           rotation: gsap.utils.random(-420, 420), opacity: 0,
           duration: gsap.utils.random(1.3, 2.4), ease: "power2.out" });
     }
@@ -295,7 +295,7 @@
     const LIFT = -52;
     gsap.set(vanEl, { x: SANTOS.x, y: SANTOS.y + LIFT, scale: VS, transformOrigin: "center bottom" });
     gsap.set(qa("#van .bust"), { scale: 0, transformOrigin: "50% 100%" });
-    gsap.set("#banner-cloth", { scaleY: 0, svgOrigin: "279 244" });
+    gsap.set("#banner-cloth", { scaleY: 0, svgOrigin: "190 154" });
     gsap.set(qa("#greeters .bust"), { y: 26, opacity: 0 });
 
     // nuvens ao vento o tempo todo
@@ -344,7 +344,7 @@
       .call(() => setCaption("mais de 400 km de saudade pela frente…"), null, "trip+=2.8")
       // 4) chegada
       .call(() => { clearInterval(puffTimer); puffTimer = null; setCaption(null); })
-      .to(cam, { x: 360, y: 390, w: 780, duration: 1.1, ease: "power2.inOut", onUpdate: applyCam })
+      .to(cam, { x: 330, y: 370, w: 800, duration: 1.1, ease: "power2.inOut", onUpdate: applyCam })
       .to(qa(".city-label")[0], { opacity: 1, duration: 0.5 }, "<+=0.3")
       .call(() => setCaption("chegamos! 🎉 …quer dizer, falta pouco!"))
       .to(qa("#greeters .bust"), { y: 0, opacity: 1, duration: 0.55, ease: "back.out(2.6)", stagger: 0.13 })
