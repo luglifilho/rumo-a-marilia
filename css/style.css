@@ -1,0 +1,295 @@
+/* ============ Rumo a Marília ============ */
+:root {
+  --cream: #f6f1e4;
+  --cream-2: #fbf8ef;
+  --ink: #4a3f2e;
+  --ink-soft: #7a6c54;
+  --gold: #b08d3f;
+  --gold-soft: #d8c088;
+  --red: #b23a30;
+  --green: #3d6b45;
+  --card: #fffdf6;
+  --ring: #e8dfc8;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body { height: 100%; }
+
+body {
+  background: var(--cream);
+  color: var(--ink);
+  font-family: "Montserrat", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+.hidden { display: none !important; }
+
+/* ============ ABERTURA ============ */
+#intro {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background:
+    radial-gradient(120% 90% at 50% 0%, #fdfaf1 0%, var(--cream) 55%, #efe6d0 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity .9s ease;
+}
+#intro.fading { opacity: 0; pointer-events: none; }
+
+#map-holder { width: 100%; height: 100%; }
+#map-holder svg { width: 100%; height: 100%; display: block; }
+
+#vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  box-shadow: inset 0 0 18vmax rgba(46, 32, 12, .42);
+}
+
+#cap {
+  position: absolute;
+  left: 50%;
+  bottom: max(26px, env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: 88vw;
+  text-align: center;
+  font-family: "Cormorant Garamond", serif;
+  font-style: italic;
+  font-size: clamp(19px, 4.6vw, 27px);
+  color: #fdf9ec;
+  background: rgba(38, 30, 16, .62);
+  border: 1px solid rgba(253, 249, 236, .25);
+  border-radius: 999px;
+  padding: 9px 26px 11px;
+  letter-spacing: .04em;
+  opacity: 0;
+  backdrop-filter: blur(3px);
+  z-index: 55;
+}
+
+#skip {
+  position: absolute;
+  top: max(14px, env(safe-area-inset-top));
+  right: 16px;
+  z-index: 60;
+  background: rgba(255, 253, 246, .75);
+  border: 1px solid var(--ring);
+  color: var(--ink-soft);
+  font: 600 12px/1 "Montserrat", sans-serif;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  padding: 10px 16px;
+  border-radius: 999px;
+  cursor: pointer;
+  backdrop-filter: blur(4px);
+}
+#skip:hover { color: var(--ink); }
+
+/* ============ HOME / CONTADOR ============ */
+#home {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 48px 20px 40px;
+  text-align: center;
+  animation: homein 1s ease both;
+}
+@keyframes homein { from { opacity: 0; transform: translateY(14px); } }
+
+.orn { color: var(--gold-soft); font-size: 26px; }
+.orn-top { margin-bottom: 18px; }
+.orn-bottom { margin-top: 34px; }
+
+.chip {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .28em;
+  color: var(--gold);
+  border: 1px solid var(--gold-soft);
+  background: var(--cream-2);
+  border-radius: 999px;
+  padding: 9px 18px 8px;
+}
+
+h1 {
+  font-family: "Cormorant Garamond", serif;
+  font-weight: 500;
+  font-size: clamp(38px, 10vw, 52px);
+  margin: 18px 0 6px;
+  color: #3e3426;
+}
+h1 em { font-style: italic; color: var(--green); }
+
+.days-ring {
+  width: min(62vw, 230px);
+  aspect-ratio: 1;
+  margin: 28px auto 6px;
+  border-radius: 50%;
+  border: 2px solid var(--ring);
+  box-shadow: 0 0 0 10px var(--cream-2), inset 0 2px 14px rgba(176, 141, 63, .08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--card);
+}
+.days-num {
+  font-family: "Cormorant Garamond", serif;
+  font-size: clamp(64px, 18vw, 92px);
+  font-weight: 500;
+  line-height: 1;
+  color: #3e3426;
+  font-variant-numeric: tabular-nums;
+}
+.days-label {
+  margin-top: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .34em;
+  color: var(--gold);
+}
+
+.hms {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin: 26px 0 8px;
+}
+.hms-cell {
+  background: var(--card);
+  border: 1px solid var(--ring);
+  border-radius: 14px;
+  min-width: 76px;
+  padding: 14px 10px 11px;
+  box-shadow: 0 2px 10px rgba(74, 63, 46, .05);
+}
+.hms-cell span {
+  display: block;
+  font-family: "Cormorant Garamond", serif;
+  font-size: 30px;
+  line-height: 1;
+  color: #3e3426;
+  font-variant-numeric: tabular-nums;
+}
+.hms-cell small {
+  display: block;
+  margin-top: 6px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .22em;
+  color: var(--gold);
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--gold-soft);
+  border-radius: 18px;
+  padding: 20px 22px;
+  margin-top: 22px;
+  box-shadow: 0 3px 16px rgba(74, 63, 46, .06);
+}
+
+.date-card strong {
+  font-family: "Cormorant Garamond", serif;
+  font-weight: 600;
+  font-size: 23px;
+  display: block;
+  color: #3e3426;
+}
+.date-card span {
+  display: block;
+  margin-top: 5px;
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+.card h2 {
+  font-family: "Cormorant Garamond", serif;
+  font-weight: 600;
+  font-size: 24px;
+  color: #3e3426;
+  margin-bottom: 12px;
+}
+
+.list-card { text-align: left; }
+.list-card h2 { text-align: center; }
+.list-card ul { list-style: none; }
+.list-card li {
+  display: block;
+  padding: 10px 2px;
+  font-size: 14.5px;
+  line-height: 1.5;
+  border-top: 1px dashed var(--ring);
+}
+.list-card li:first-child { border-top: 0; }
+.list-card li span { margin-right: 8px; }
+.list-card li.important { color: var(--red); }
+.list-card li.important em { font-size: 12.5px; color: var(--ink-soft); }
+
+.louvor-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--green);
+  margin-bottom: 12px;
+}
+.video-box {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #e9e2d0;
+}
+.video-box iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+.louvor-note {
+  margin-top: 10px;
+  font-size: 11.5px;
+  letter-spacing: .06em;
+  color: var(--ink-soft);
+}
+
+.wa-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 26px;
+  background: #25d366;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 15px;
+  padding: 15px 26px;
+  border-radius: 999px;
+  box-shadow: 0 6px 18px rgba(37, 211, 102, .35);
+  transition: transform .15s ease;
+}
+.wa-btn:hover { transform: translateY(-2px); }
+
+footer { margin-top: 14px; }
+#replay {
+  background: none;
+  border: none;
+  color: var(--ink-soft);
+  font: 500 12px "Montserrat", sans-serif;
+  letter-spacing: .08em;
+  cursor: pointer;
+  padding: 8px;
+}
+#replay:hover { color: var(--ink); }
+
+/* celebração quando chegar o dia */
+.its-today .days-num { font-size: clamp(40px, 11vw, 58px); }
+
+@media (max-width: 380px) {
+  .hms-cell { min-width: 30%; }
+}

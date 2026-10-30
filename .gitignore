@@ -1,0 +1,6 @@
+# fica só na máquina local: material bruto e ferramentas de recorte
+assets/src-prints/
+assets/avatars/
+tools/
+__pycache__/
+assets/busts/_contact_sheet.png
