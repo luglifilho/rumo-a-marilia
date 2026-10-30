@@ -66,18 +66,6 @@ body {
 
 .gate-card { text-align: center; padding: 24px; }
 
-.gate-kicker {
-  display: inline-block;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: .3em;
-  color: var(--gold);
-  border: 1px solid var(--gold-soft);
-  border-radius: 999px;
-  padding: 8px 16px 7px;
-  background: var(--cream-2);
-}
-
 .gate-card h2 {
   font-family: "Cormorant Garamond", serif;
   font-weight: 500;
@@ -92,36 +80,31 @@ body {
   margin-bottom: 26px;
 }
 
+#speedo { display: block; margin: 6px auto 2px; }
+#speedo-fill { transition: none; }
+
 #pedal {
   position: relative;
-  background: var(--card);
-  border: 2px solid var(--gold-soft);
-  border-radius: 26px;
-  padding: 20px 34px 14px;
+  background: none;
+  border: none;
+  padding: 6px 30px;
   cursor: pointer;
-  box-shadow: 0 10px 26px rgba(74, 63, 46, .18);
-  transition: transform .12s ease, box-shadow .12s ease;
-  animation: pedalpulse 1.6s ease-in-out infinite;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  touch-action: manipulation;
+  user-select: none;
+  filter: drop-shadow(0 8px 14px rgba(74, 63, 46, .3));
+  transition: transform .12s ease;
+  animation: pedalpulse 1.5s ease-in-out infinite;
 }
-#pedal:hover { transform: translateY(-3px); }
-#pedal:active { transform: translateY(2px) scale(.97); box-shadow: 0 4px 12px rgba(74, 63, 46, .2); }
-#pedal:active #pedal-plate { transform: rotate(-2deg); transform-origin: 65px 150px; }
+#pedal.holding, #pedal:active { transform: translateY(3px) scale(.97); animation: none; }
+#pedal.holding #pedal-plate, #pedal:active #pedal-plate { transform: rotate(-2deg); transform-origin: 65px 150px; }
 #pedal-plate { transition: transform .1s ease; }
 
 @keyframes pedalpulse {
-  0%, 100% { box-shadow: 0 10px 26px rgba(74, 63, 46, .18); }
-  50% { box-shadow: 0 10px 34px rgba(176, 141, 63, .4); }
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
 }
-
-.vrum {
-  position: absolute;
-  right: -6px;
-  bottom: 14px;
-  font-size: 22px;
-  opacity: 0;
-  transition: opacity .2s;
-}
-#pedal:active .vrum { opacity: 1; }
 
 .gate-card small {
   display: block;

@@ -24,11 +24,27 @@
 
   <div id="start-gate">
     <div class="gate-card">
-      <span class="gate-kicker">SANTOS ➜ MARÍLIA</span>
       <h2>Prontos pra viagem?</h2>
-      <p>Pise no acelerador pra ligar o motor</p>
-      <button id="pedal" type="button" aria-label="Pisar no acelerador e começar a viagem">
-        <svg viewBox="0 0 130 180" width="96" height="133" aria-hidden="true">
+      <p>Segure o acelerador pra ligar o motor</p>
+
+      <svg id="speedo" viewBox="0 0 220 132" width="230" aria-hidden="true">
+        <path d="M 18 118 A 92 92 0 0 1 202 118" fill="none" stroke="#e8dfc8" stroke-width="14" stroke-linecap="round"/>
+        <path id="speedo-fill" d="M 18 118 A 92 92 0 0 1 202 118" fill="none" stroke="#c84a3c" stroke-width="14" stroke-linecap="round"/>
+        <g id="speedo-ticks" stroke="#8d7342" stroke-width="3" stroke-linecap="round"></g>
+        <text x="30" y="131" font-size="12" font-weight="700" fill="#8d7342">0</text>
+        <text x="182" y="131" font-size="12" font-weight="700" fill="#8d7342">160</text>
+        <text id="speedo-num" x="110" y="96" text-anchor="middle" font-size="30" font-weight="700" fill="#3e3426" font-variant-numeric="tabular-nums">0</text>
+        <text x="110" y="112" text-anchor="middle" font-size="10" font-weight="700" letter-spacing="2" fill="#b08d3f">KM/H</text>
+        <g id="needle" transform="rotate(-90 110 118)">
+          <path d="M 110 118 L 110 40" stroke="#3e3426" stroke-width="4" stroke-linecap="round"/>
+          <path d="M 104 118 L 110 28 L 116 118 Z" fill="#c84a3c" opacity=".85"/>
+        </g>
+        <circle cx="110" cy="118" r="10" fill="#3e3426"/>
+        <circle cx="110" cy="118" r="4" fill="#d8c088"/>
+      </svg>
+
+      <button id="pedal" type="button" aria-label="Segurar o acelerador para ligar o motor e começar a viagem">
+        <svg viewBox="0 0 130 180" width="92" height="127" aria-hidden="true">
           <g id="pedal-art">
             <rect x="52" y="128" width="26" height="22" rx="5" fill="#8a8273"/>
             <rect x="34" y="146" width="62" height="18" rx="7" fill="#555047"/>
@@ -42,9 +58,8 @@
             </g>
           </g>
         </svg>
-        <span class="vrum" aria-hidden="true">💨</span>
       </button>
-      <small>pise fundo! 🚐</small>
+      <small id="gate-hint">aperte e segure até o motor pegar 🚐</small>
     </div>
   </div>
 </section>

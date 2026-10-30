@@ -95,13 +95,132 @@
     intro.classList.remove("hidden", "fading");
     home.classList.add("hidden");
     gate.classList.remove("fading");
+    // rearma o acelerador
+    launched = false; holding = false; prog = 0;
     IntroAnim.build(); // o mapa já fica pronto atrás da tela do acelerador
   }
 
-  $("pedal").addEventListener("click", () => {
-    gate.classList.add("fading");
-    IntroAnim.play(endIntro);
-  });
+  /* ---------- acelerador: segurar até o motor pegar ---------- */
+  const pedal = $("pedal");
+  const needle = $("needle");
+  const speedoNum = $("speedo-num");
+  const speedoFill = $("speedo-fill");
+  const fillLen = speedoFill.getTotalLength();
+  speedoFill.style.strokeDasharray = fillLen;
+  speedoFill.style.strokeDashoffset = fillLen;
+
+  // tracinhos do velocímetro
+  (function ticks() {
+    const g = $("speedo-ticks");
+    const ns = "http://www.w3.org/2000/svg";
+    for (let i = 0; i <= 8; i++) {
+      const a = Math.PI - (Math.PI * i) / 8;
+      const x1 = 110 + Math.cos(a) * 78, y1 = 118 - Math.sin(a) * 78;
+      const x2 = 110 + Math.cos(a) * 70, y2 = 118 - Math.sin(a) * 70;
+      const l = document.createElementNS(ns, "line");
+      l.setAttribute("x1", x1); l.setAttribute("y1", y1);
+      l.setAttribute("x2", x2); l.setAttribute("y2", y2);
+      g.appendChild(l);
+    }
+  })();
+
+  /* ronco do motor (Web Audio, sem arquivo) */
+  const engine = (() => {
+    let ctx, osc1, osc2, gain, filt, noise, noiseGain, started = false;
+    function ensure() {
+      if (started) return;
+      ctx = new (window.AudioContext || window.webkitAudioContext)();
+      gain = ctx.createGain(); gain.gain.value = 0;
+      filt = ctx.createBiquadFilter(); filt.type = "lowpass"; filt.frequency.value = 400; filt.Q.value = 2;
+      osc1 = ctx.createOscillator(); osc1.type = "sawtooth"; osc1.frequency.value = 50;
+      osc2 = ctx.createOscillator(); osc2.type = "square"; osc2.frequency.value = 25;
+      const o2g = ctx.createGain(); o2g.gain.value = 0.5;
+      // chiado de partida
+      const buf = ctx.createBuffer(1, ctx.sampleRate, ctx.sampleRate);
+      const d = buf.getChannelData(0);
+      for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+      noise = ctx.createBufferSource(); noise.buffer = buf; noise.loop = true;
+      noiseGain = ctx.createGain(); noiseGain.gain.value = 0;
+      osc1.connect(filt); osc2.connect(o2g); o2g.connect(filt);
+      noise.connect(noiseGain); noiseGain.connect(filt);
+      filt.connect(gain); gain.connect(ctx.destination);
+      osc1.start(); osc2.start(); noise.start();
+      started = true;
+    }
+    return {
+      rev(p, t) { // p: 0..1, t: segundos (pro tremor de partida)
+        ensure();
+        if (ctx.state === "suspended") ctx.resume();
+        const sputter = Math.sin(t * 34) * (1 - p) * 9;   // motor "pegando"
+        const f = 46 + p * 190 + sputter;
+        osc1.frequency.setTargetAtTime(f, ctx.currentTime, 0.03);
+        osc2.frequency.setTargetAtTime(f / 2, ctx.currentTime, 0.03);
+        filt.frequency.setTargetAtTime(320 + p * 2400, ctx.currentTime, 0.05);
+        gain.gain.setTargetAtTime(0.06 + p * 0.2, ctx.currentTime, 0.05);
+        noiseGain.gain.setTargetAtTime(0.12 * (1 - p), ctx.currentTime, 0.05);
+      },
+      idleOff() {
+        if (!started) return;
+        gain.gain.setTargetAtTime(0, ctx.currentTime, 0.18);
+        noiseGain.gain.setTargetAtTime(0, ctx.currentTime, 0.1);
+      },
+      launch() { // reváda final e fade
+        if (!started) return;
+        osc1.frequency.setTargetAtTime(290, ctx.currentTime, 0.1);
+        filt.frequency.setTargetAtTime(3200, ctx.currentTime, 0.1);
+        gain.gain.setTargetAtTime(0.3, ctx.currentTime, 0.08);
+        gain.gain.setTargetAtTime(0, ctx.currentTime + 1.4, 0.8);
+      },
+    };
+  })();
+
+  let holding = false, prog = 0, holdT = 0, launched = false, lastTs = 0;
+
+  function gateFrame(ts) {
+    const dt = Math.min(0.05, (ts - lastTs) / 1000 || 0.016);
+    lastTs = ts;
+    if (holding) { holdT += dt; prog = Math.min(1, prog + dt / 1.6); }
+    else prog = Math.max(0, prog - dt * 1.4);
+
+    const ang = -90 + prog * 180;
+    needle.setAttribute("transform", `rotate(${ang.toFixed(1)} 110 118)`);
+    speedoNum.textContent = Math.round(prog * 160);
+    speedoFill.style.strokeDashoffset = fillLen * (1 - prog);
+    if (holding) engine.rev(prog, holdT); else if (prog > 0) engine.rev(prog * 0.4, holdT);
+
+    if (prog >= 1 && !launched) {
+      launched = true;
+      engine.launch();
+      if (navigator.vibrate) navigator.vibrate(60);
+      pedal.classList.remove("holding");
+      gate.classList.add("fading");
+      IntroAnim.play(endIntro);
+      return; // para o loop
+    }
+    if (prog <= 0 && !holding) { engine.idleOff(); gateRaf = null; return; }
+    gateRaf = requestAnimationFrame(gateFrame);
+  }
+  let gateRaf = null;
+
+  function holdStart(e) {
+    if (launched) return;
+    e.preventDefault();
+    holding = true; holdT = 0;
+    pedal.classList.add("holding");
+    $("gate-hint").textContent = "segura firme… 🔥";
+    if (!gateRaf) { lastTs = 0; gateRaf = requestAnimationFrame(gateFrame); }
+  }
+  function holdEnd() {
+    if (launched) return;
+    holding = false;
+    pedal.classList.remove("holding");
+    $("gate-hint").textContent = "aperte e segure até o motor pegar 🚐";
+  }
+  pedal.addEventListener("pointerdown", holdStart);
+  pedal.addEventListener("pointerup", holdEnd);
+  pedal.addEventListener("pointerleave", holdEnd);
+  pedal.addEventListener("pointercancel", holdEnd);
+  pedal.addEventListener("contextmenu", (e) => e.preventDefault());
 
   $("skip").addEventListener("click", endIntro);
   $("replay").addEventListener("click", () => {
